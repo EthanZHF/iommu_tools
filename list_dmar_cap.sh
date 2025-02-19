@@ -25,8 +25,16 @@ decode_cap() {
     printf "%-60s: %-10d Bits: %-5s Binary: %s\n" "Deprecated (DEP)" $(( (cap >> 23) & 1 )) "23" "$(printf '%01b' $(( (cap >> 23) & 1 )))"
     printf "%-60s: %-10d Bits: %-5s Binary: %s\n" "Zero Length Read (ZLR)" $(( (cap >> 22) & 1 )) "22" "$(printf '%01b' $(( (cap >> 22) & 1 )))"
     printf "%-60s: %-10d Bits: %-5s Binary: %s\n" "Maximum Guest Address Width (MGAW)" $(( (cap >> 16) & 0x3F )) "21:16" "$(printf '%02xh' $(( (cap >> 16) & 0x3F )))"
+    sagaw_value=$(( (cap >> 8) & 0x1f ))  # 提取 bit 12:8
+    sagaw_desc=""
+    # 解析支持的 AGAW 级别（互斥）
+    (( sagaw_value & 0x02 )) && sagaw_desc+=" 39-bit AGAW (3-level page-table);"
+    (( sagaw_value & 0x04 )) && sagaw_desc+=" 48-bit AGAW (4-level page-table);"
+    (( sagaw_value & 0x08 )) && sagaw_desc+=" 57-bit AGAW (5-level page-table);"
+    [ -z "$sagaw_desc" ] && sagaw_desc=" Reserved"
 
-    printf "%-60s: %-10d Bits: %-5s Hex   : %s\n" "Supported Adjusted Guest Address Widths (SAGAW)" $(( (cap >> 8) & 0x1F )) "12:8" "$(printf '%02xh' $(( (cap >> 8) & 0x1F )))"
+    printf "%-60s: %-10d Bits: %-5s Binary: %s (%s)\n" "Supported Adjusted Guest Address Widths (SAGAW)" $sagaw_value "12:8" "$(printf '%02xh' $sagaw_value)" "$sagaw_desc"
+
     printf "%-60s: %-10d Bits: %-5s Binary: %s\n" "Caching Mode (CM)" $(( (cap >> 7) & 1 )) "7" "$(printf '%01b' $(( (cap >> 7) & 1 )))"
     printf "%-60s: %-10d Bits: %-5s Binary: %s\n" "Protected High-Memory Region (PHMR)" $(( (cap >> 6) & 1 )) "6" "$(printf '%01b' $(( (cap >> 6) & 1 )))"
     printf "%-60s: %-10d Bits: %-5s Binary: %s\n" "Protected Low-Memory Region (PLMR)" $(( (cap >> 5) & 1 )) "5" "$(printf '%01b' $(( (cap >> 5) & 1 )))"
