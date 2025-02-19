@@ -74,7 +74,7 @@ decode_ecap() {
     printf "%-50s: %-10d Bits: %-5s Binary: %s\n" "Supervisor Request Support (SRS)" $(( (ecap >> 31) & 1 )) "31" "$(printf '%01b' $(( (ecap >> 31) & 1 )))"
     printf "%-50s: %-10d Bits: %-5s Binary: %s\n" "No Write Flag Support (NWFS)" $(( (ecap >> 33) & 1 )) "33" "$(printf '%01b' $(( (ecap >> 33) & 1 )))"
     printf "%-50s: %-10d Bits: %-5s Binary: %s\n" "Extended Accessed Flag Support (EAFS)" $(( (ecap >> 34) & 1 )) "34" "$(printf '%01b' $(( (ecap >> 34) & 1 )))"
-    printf "%-50s: %-10d Bits: %-5s Hex   : %s\n" "PASID Size Support (PSS)" $(( (ecap >> 35) & 0x1f )) "35-39" "$(printf '%03xh' $(( (ecap >> 35) & 0x1f )))"
+    printf "%-50s: %-10d Bits: %-5s Hex   : %s\n" "PASID Size Support (PSS)" $(( (ecap >> 35) & 0x1f+1 )) "35-39" "$(printf '%03xh' $(( (ecap >> 35) & 0x1f+1 )))"
     printf "%-50s: %-10d Bits: %-5s Binary: %s\n" "Process Address Space ID support (PASID)" $(( (ecap >> 40) & 1)) "40" "$(printf '%01b' $(( (ecap >> 40) & 1)))"
     printf "%-50s: %-10d Bits: %-5s Binary: %s\n" "Deivce-TLB Invalidation Throttle (DIT)" $(( (ecap >> 41) & 1)) "41" "$(printf '%01b' $(( (ecap >> 41) & 1)))"
     printf "%-50s: %-10d Bits: %-5s Binary: %s\n" "Page-request Drain Support (PDS)" $(( (ecap >> 42) & 1 )) "42" "$(printf '%01b' $(( (ecap >> 42) & 1 )))"
